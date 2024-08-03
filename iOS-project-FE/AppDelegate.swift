@@ -6,16 +6,31 @@
 //
 
 import UIKit
+import UserNotifications
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        NotificationUtility.requestNotificationAuthorization()
+//        UNUserNotificationCenter.current().delegate = self
+
         return true
     }
+    
+//    // Handle notifications when the app is in the foreground
+//       func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+//           completionHandler([.alert, .sound])
+//       }
+       
+//       func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+//           completionHandler([.alert, .sound])
+//       }
+    
+  
 
     // MARK: UISceneSession Lifecycle
 
