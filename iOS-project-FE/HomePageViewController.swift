@@ -34,18 +34,30 @@ class HomePageViewController: UIViewController {
             DispatchQueue.main.async {
                 print("asfjkghasfkhj: \(message)")
                 // Parse the JSON message
-                if let data = message.data(using: .utf8) {
-                    do {
-                        if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-                           let notificationMessage = json["message"] as? String {
-                            self?.messageLabel.text = notificationMessage
-                            
-                            // Schedule the notification
-                            NotificationUtility.scheduleLocalNotification(with: notificationMessage)
-                        } else {
-                            self?.messageLabel.text = "Invalid message format"
-                        }
-                    } catch {
+                               if let data = message.data(using: .utf8) {
+                                   do {
+                                       if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                                           // Check the type of message
+                                           if let messageType = json["type"] as? String {
+                                               switch messageType {
+                                               case "dismiss":
+                                                   AlertUtility.dismissCurrentAlert() // Dismiss the existing alert
+                                               case "notification":
+                                                   if let notificationMessage = json["message"] as? String {
+                                                       self?.messageLabel.text = notificationMessage
+                                                       // Schedule the notification only if it's a new message
+                                                       NotificationUtility.scheduleLocalNotification(with: notificationMessage)
+                                                   } else {
+                                                       self?.messageLabel.text = "Invalid message format"
+                                                   }
+                                               default:
+                                                   self?.messageLabel.text = "Unknown message type"
+                                               }
+                                           } else {
+                                               self?.messageLabel.text = "Invalid message format"
+                                           }
+                                       }
+                                   } catch {
                         print("Error parsing JSON: \(error)")
                         self?.messageLabel.text = "Error parsing message"
                     }
