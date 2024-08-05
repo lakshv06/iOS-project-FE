@@ -35,7 +35,7 @@ class WebSocketService: NSObject, URLSessionWebSocketDelegate {
         
         
 
-        let url = URL(string: "wss://localhost:8000/")!
+        let url = URL(string: "ws://localhost:8000/")!
         let urlSession = URLSession(configuration: .default, delegate: self, delegateQueue: OperationQueue())
         webSocketTask = urlSession.webSocketTask(with: url)
         webSocketTask?.resume()
@@ -134,21 +134,36 @@ class WebSocketService: NSObject, URLSessionWebSocketDelegate {
             case .success(let message):
                 switch message {
                 case .string(let text):
-                    print("Received string: \(text)")
+                    print("Received string message: \(text)")
+                    self?.handleReceivedMessage(text)
                     self?.onMessageReceived?(text)
                 case .data(let data):
                     if let text = String(data: data, encoding: .utf8) {
-                        print("Received data: \(text)")
+                        print("Received data message: \(text)")
+                        self?.handleReceivedMessage(text)
                         self?.onMessageReceived?(text)
                     }
                 @unknown default:
-                    fatalError()
-                }
+                                // Log the unknown message type and its data
+                                print("Unknown message type received: \(message)")
+                                fatalError("Unknown message type received: \(message)")
+                            }
             case .failure(let error):
                 print("Error receiving message: \(error)")
             }
 
             self?.listenForMessages()
+        }
+    }
+    
+    func handleReceivedMessage(_ message: String) {
+        if message.contains("\"type\":\"dismiss\"") {
+            print("Dismiss message received: \(message)")
+            AlertUtility.dismissCurrentAlert() // Dismiss the existing alert
+        } else {
+            print("Regular message received: \(message)")
+            // Handle other types of messages as needed
+            // You might want to call a delegate or notification here to handle other cases
         }
     }
 }
