@@ -538,7 +538,6 @@
 				INFOPLIST_FILE = "";
 				INFOPLIST_KEY_CFBundleDisplayName = "iOS-watch-project-FE";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = Test;
-				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = Test;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKWatchOnly = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -571,7 +570,6 @@
 				INFOPLIST_FILE = "";
 				INFOPLIST_KEY_CFBundleDisplayName = "iOS-watch-project-FE";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = Test;
-				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = Test;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKWatchOnly = YES;
 				LD_RUNPATH_SEARCH_PATHS = (

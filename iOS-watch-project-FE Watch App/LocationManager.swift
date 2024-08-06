@@ -16,14 +16,18 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     override init() {
         super.init()
         locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.last {
-            self.location = location
-        }
+                self.location = location
+                print("Updated location: \(location.coordinate.latitude), \(location.coordinate.longitude)")
+            } else {
+                print("No locations received")
+            }
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
