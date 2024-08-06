@@ -1,18 +1,14 @@
-//
-//  ContentView.swift
-//  iOS-watch-project-FE Watch App
-//
-//  Created by Lakshya Verma on 04/08/24.
-//
-
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject private var locationManager = LocationManager()
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var isSignedIn: Bool = false
     @State private var isLoading: Bool = false
     @State private var signInError: String? = nil
+    @State private var showAlert: Bool = false
+    @State private var alertMessage: String = ""
 
     var body: some View {
         NavigationStack {
@@ -64,6 +60,16 @@ struct ContentView: View {
                 .padding(.top, 0)
             }
         }
+        .alert(isPresented: $showAlert) {
+            Alert(
+                title: Text("Success"),
+                message: Text(alertMessage),
+                dismissButton: .default(Text("OK")) {
+                    // Handle OK action, e.g., navigate to the next screen
+                    isSignedIn = true
+                }
+            )
+        }
     }
 
     private func signIn() {
@@ -80,12 +86,20 @@ struct ContentView: View {
             return
         }
         
-        // Send the UUID and email to your backend server
-        sendToBackend(email: email, password: password, deviceName: deviceName, deviceModel: deviceModel, deviceIdentifier: deviceIdentifier)
+        guard let currentLocation = locationManager.location else {
+            signInError = "Location not available"
+            isLoading = false
+            return
+        }
+
+        let latitude = currentLocation.coordinate.latitude
+        let longitude = currentLocation.coordinate.longitude
+        
+        sendToBackend(email: email, password: password, deviceName: deviceName, deviceModel: deviceModel, deviceIdentifier: deviceIdentifier, latitude: latitude, longitude: longitude)
     }
 
     // Backend data
-    func sendToBackend(email: String, password: String, deviceName: String, deviceModel: String, deviceIdentifier: String) {
+    func sendToBackend(email: String, password: String, deviceName: String, deviceModel: String, deviceIdentifier: String, latitude: Double, longitude: Double) {
         guard let url = URL(string: "http://localhost:8000/sign-in") else {
             signInError = "Invalid URL"
             isLoading = false
@@ -101,7 +115,9 @@ struct ContentView: View {
             "password": password,
             "device_name": deviceName,
             "device_model": deviceModel,
-            "device_identifier": deviceIdentifier
+            "device_identifier": deviceIdentifier,
+            "latitude": latitude,
+            "longitude": longitude
         ]
 
         do {
@@ -123,7 +139,8 @@ struct ContentView: View {
                 if let httpResponse = response as? HTTPURLResponse {
                     if httpResponse.statusCode == 200 {
                         // Handle successful sign-in
-                        isSignedIn = true
+                        alertMessage = "Sign In Successful!"
+                        showAlert = true
                     } else {
                         signInError = "Sign In Failed: \(httpResponse.statusCode)"
                     }
