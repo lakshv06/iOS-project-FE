@@ -58,7 +58,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             print("Device Model: \(deviceModel)")
             print("Device Identifier: \(String(describing: deviceIdentifier))")
         
-        // Send the UUID and email to your backend server here
+        // Send the UUID and email to backend server here
         if deviceIdentifier != nil {
                 sendToBackend(email: email, password: password, deviceName: deviceName, deviceModel: deviceModel, deviceIdentifier: deviceIdentifier!)
                 }

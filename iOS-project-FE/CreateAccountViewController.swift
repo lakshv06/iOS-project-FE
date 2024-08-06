@@ -59,7 +59,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
                 print("Device Model: \(deviceModel)")
                 print("Device Identifier: \(String(describing: deviceIdentifier))")
             
-            // Send the UUID and email to your backend server here
+            // Send the UUID and email to backend server here
             if deviceIdentifier != nil {
                             sendToBackend(email: email, password: password, confirmPassword: confirmPassword, deviceName: deviceName, deviceModel: deviceModel, deviceIdentifier: deviceIdentifier!)
                         }
@@ -108,7 +108,7 @@ class CreateAccountViewController: UIViewController, UITextFieldDelegate {
                return
            }
         
-        // Define the URL for your API endpoint
+        // Define the URL for API endpoint
         guard let url = URL(string: "http://localhost:8000/sign-up") else {
             print("Invalid URL")
             return

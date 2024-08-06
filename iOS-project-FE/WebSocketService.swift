@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Foundation
 import UIKit
 
 class WebSocketService: NSObject, URLSessionWebSocketDelegate {
