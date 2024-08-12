@@ -11,6 +11,19 @@ import UIKit
 
 class HomePageViewController: UIViewController {
     
+    @IBAction func signOutTapped(_ sender: Any) {
+        print("Sign out button clicked is called")
+
+         WebSocketService.shared.disconnect()
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            if let mainPageViewController = self.storyboard?.instantiateViewController(withIdentifier: "MainViewController") as? ViewController {
+                self.navigationController?.pushViewController(mainPageViewController, animated: true)
+            } else {
+                print("Error: ViewController with identifier 'MainViewController' not found or class mismatch")
+            }
+        }
+    }
     @IBOutlet weak var messageLabel: UILabel!
     var responseData: [String: Any]?
     
@@ -66,6 +79,14 @@ class HomePageViewController: UIViewController {
         }
 
     }
+    
+//    @IBAction func signOutTapped(_ sender: UIButton) {
+//        print("Sign out button clicked is called")
+//         // Notify the backend and disconnect WebSocket
+//         WebSocketService.shared.disconnect()
+//         // Optionally navigate to the login screen or close the current session
+//         // self.dismiss(animated: true, completion: nil)
+//     }
     
 
     /*

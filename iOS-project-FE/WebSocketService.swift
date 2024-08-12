@@ -78,6 +78,27 @@ class WebSocketService: NSObject, URLSessionWebSocketDelegate {
             return
         }
 
+        let closureMessage = [
+            "type": "closeConnection",
+            "deviceIdentifier": UIDevice.current.identifierForVendor?.uuidString ?? "UnknownDevice"
+        ]
+        
+        if let data = try? JSONSerialization.data(withJSONObject: closureMessage, options: []) {
+            let message = URLSessionWebSocketTask.Message.data(data)
+            webSocketTask?.send(message) { [weak self] error in
+                if let error = error {
+                    print("Error sending closure message: \(error)")
+                } else {
+                    print("Closure message sent")
+                    self?.finalizeDisconnect()
+                }
+            }
+        } else {
+            finalizeDisconnect()
+        }
+    }
+
+    private func finalizeDisconnect() {
         webSocketTask?.cancel(with: .goingAway, reason: nil)
         isConnected = false
         print("WebSocket connection is closing...")
